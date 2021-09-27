@@ -15,6 +15,7 @@ class Board:
         print('__________New Game__________')
         print('Player 1: ' + self.players.get_score('p1') + ' wins')
         print('Player 2: ' + self.players.get_score('p2') + ' wins')
+        print('Ties: ' + str(self.players.ties))
         self.squares = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
         self.draw_board()
         self.player_turn(self.player_up_next)
@@ -56,7 +57,8 @@ class Board:
                 x_squares.append(i)
             if self.squares[i] == 'O':
                 o_squares.append(i)
-        if self.win_check(x_squares, o_squares) == 'X Wins!' or self.win_check(x_squares, o_squares) == "O Wins!":
+        winner = self.win_check(x_squares, o_squares)
+        if winner == 'X Wins!' or winner == "O Wins!":
             self.end_game()
         self.player_turn(self.player_up_next)
         pass
@@ -79,6 +81,14 @@ class Board:
             self.players.update_score('p2')
             print('O Wins!')
             return 'O Wins!'
+        if 0 in x and 4 in x and 8 in x:
+            self.players.update_score('p1')
+            print('X Wins!')
+            return 'X Wins!'
+        if 0 in o and 4 in o and 8 in o:
+            self.players.update_score('p2')
+            print('O Wins!')
+            return 'O Wins!'
         if 1 in x and 4 in x and 7 in x:
             self.players.update_score('p1')
             print('X Wins!')
@@ -92,6 +102,14 @@ class Board:
             print('X Wins!')
             return 'X Wins!'
         if 2 in o and 5 in o and 8 in o:
+            self.players.update_score('p2')
+            print('O Wins!')
+            return 'O Wins!'
+        if 2 in x and 4 in x and 6 in x:
+            self.players.update_score('p1')
+            print('X Wins!')
+            return 'X Wins!'
+        if 2 in o and 4 in o and 6 in o:
             self.players.update_score('p2')
             print('O Wins!')
             return 'O Wins!'
@@ -111,21 +129,26 @@ class Board:
             self.players.update_score('p2')
             print('O Wins!')
             return 'O Wins!'
-        if [0, 1, 2, 3, 4, 5, 6, 7, 8] in x+o:
+        both = x+o
+        if len(both) == 9:
             self.players.update_score('tie')
+            print('The game was a Tie')
+            self.end_game()
         pass
 
     def end_game(self):
         # TODO Terminate the application
         print('Scores:')
-        print('Player 1: ' + self.players.get_score('p1') + 'wins')
-        print('Player 2: ' + self.players.get_score('p2') + 'wins\n\n')
-        print('Ties: ' + str(self.players.ties))
+        print('Player 1: ' + self.players.get_score('p1') + ' wins')
+        print('Player 2: ' + self.players.get_score('p2') + ' wins')
+        print('Ties: ' + str(self.players.ties) + '\n')
         if input('Would you like to play another game? yes or no\n') == 'yes':
             self.begin_game()
         else:
             print('Game Ended - Final Scores')
-
+            print('Player 1: ' + self.players.get_score('p1') + ' wins')
+            print('Player 2: ' + self.players.get_score('p2') + ' wins')
+            print('Ties: ' + str(self.players.ties) + '\n')
             exit()
         pass
     pass
